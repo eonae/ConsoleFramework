@@ -41,9 +41,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AppearenceConfig.cs" />
+    <Compile Include="CommandParameters.cs" />
     <Compile Include="CommandsDispatcher.cs" />
     <Compile Include="Command.cs" />
     <Compile Include="ConsoleFrame.cs" />
+    <Compile Include="InputParser.cs" />
     <Compile Include="Styler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StandardMessages.cs" />

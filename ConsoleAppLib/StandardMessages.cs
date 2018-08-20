@@ -1,17 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Reflection;
 
 namespace ConsoleAppLib
 {
-    public enum StandardMessage { InvalidCommand, Test }
+    public enum StandardMessage { InvalidCommand, InvalidParameters }
     public static class StandardMessages
     {
         public static string InvalidCommand { get; set; } = "Invalid command!";
-        public static string Test { get; set; } = "Test!";
+        public static string InvalidParameters { get; set; } = "Invalid command parameters!";
 
         public static void Display(StandardMessage messageName)
         {

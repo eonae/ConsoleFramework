@@ -6,15 +6,13 @@ namespace ConsoleAppLib
 
     public class ConsoleFrame
     {
-        private CommandsDispatcher dispatcher = new CommandsDispatcher();
+        private CommandsDispatcher dispatcher;
+        private InternalAction action = InternalAction.NoAction;
 
-        
-        private static InternalAction action = InternalAction.NoAction;
-        public static void ChangeAction(InternalAction changeTo)
+        public void ChangeAction(InternalAction changeTo)
         {
             action = changeTo;
         } 
-
         public void Run()
         {
             Styler.DisplayGreetings();
@@ -36,6 +34,11 @@ namespace ConsoleAppLib
                 }
             }
 
+        }
+
+        public ConsoleFrame()
+        {
+            dispatcher = new CommandsDispatcher(this);
         }
     }
 }

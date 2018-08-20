@@ -1,5 +1,4 @@
-﻿using System;
-using ConsoleAppLib;
+﻿using ConsoleAppLib;
 
 namespace Blank
 {
@@ -7,9 +6,7 @@ namespace Blank
     {
         static void Main(string[] args)
         {
-            var app = new ConsoleFrame();
-            Styler.Appearence.InnerMargin = (3, 0);
-            app.Run();
+            new ConsoleFrame().Run();
         }
     }
 }

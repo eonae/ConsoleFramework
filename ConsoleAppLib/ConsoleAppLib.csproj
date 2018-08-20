@@ -45,6 +45,7 @@
     <Compile Include="CommandsDispatcher.cs" />
     <Compile Include="Command.cs" />
     <Compile Include="ConsoleFrame.cs" />
+    <Compile Include="Extensions.cs" />
     <Compile Include="InputParser.cs" />
     <Compile Include="Styler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

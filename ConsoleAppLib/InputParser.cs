@@ -9,10 +9,17 @@
             // Распознаёт команду
             var decomposed = Decompose(input);
             var command = dispatcher.GetCommandByName(decomposed.Name);
-            if (command == null)
-                return (dispatcher.GetCommandByName("RepeatInput"), new CommandParameters());
-            else
-                return (command, decomposed.parameters);
+            switch (command)
+            {
+                case null:
+                    return (dispatcher.GetCommandByName("RepeatInput"), new CommandParameters("InvalidCommand")); //Invalid command
+                case Command c when c.IsInternal:
+                    return (dispatcher.GetCommandByName("RepeatInput"), new CommandParameters("InternalCommand")); //Internal command
+                case Command c when !c.ValidateParameters(decomposed.parameters):
+                    return (dispatcher.GetCommandByName("RepeatInput"), new CommandParameters("InvalidParameters")); //Invalid parameters
+                default:
+                    return (command, decomposed.parameters);
+            }
         }
         private (string Name, CommandParameters parameters) Decompose(string input)
         {
@@ -34,13 +41,5 @@
             this.dispatcher = dispatcher;
         }
     }
-
-    /// 1. Переделать внутренние команды (внутренние - это те, которые нельзя ввести с консоли - RepeatInput)
-    /// 2. К командам прикрутить функцию валидации
-    /// 3. Поставить валидацию в инпут парсер
-    /// 4. Команду RepeatInput сделать с параметром "неверная команда", "неверные параметры".
-    /// 5. По фану - прикрутить английский и русский языки и сделать команду switch language
-    /// 6. Сделать вывод списка доступных команд..
-    /// 7. Возможно, строковые константы вынести в файлы.
 
 }

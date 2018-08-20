@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System;
 
 namespace ConsoleAppLib
 {
@@ -7,8 +8,7 @@ namespace ConsoleAppLib
     {
         // Хранение изменение списка доступных команд
 
-        private List<Command> internalCommands = new List<Command>();
-        private List<Command> userCommands = new List<Command>();
+        private List<Command> commands = new List<Command>();
         private ConsoleFrame frame;
         private InputParser parser;
 
@@ -18,32 +18,43 @@ namespace ConsoleAppLib
         }
         public Command GetCommandByName(string name)
         {
-            foreach (var command in internalCommands.Union(userCommands).ToList())
+            foreach (var command in commands)
                 if (name.ToLower() == command.Name.ToLower())
                     return command;
             return null;
         }
+        public void Add(Command command)
+        {
+            commands.Add(command);
+        }
+
 
         public CommandsDispatcher(ConsoleFrame frame)
         {
             this.frame = frame;
             parser = new InputParser(this);
 
-            internalCommands.Add(
-                new Command(isInternal: true
+            commands.Add(
+                new Command(isInternal: false
                            , name: "Quit"
-                           , needParameters: false
                            , commandDelegate: (parameters) =>
                            {
                                frame.ChangeAction(InternalAction.Quit);
-                           }));
-            internalCommands.Add(
+                           })); // Без валидации
+            commands.Add(
                 new Command(isInternal: true
                            , name: "RepeatInput"
-                           , needParameters: false
                            , commandDelegate: (parameters) =>
                            {
                                frame.ChangeAction(InternalAction.RepeatInput);
+                               frame.ChangeMessage((StandardMessage)parameters.Array[0].StringToEnum(StandardMessage.NoMessage));
+                           }
+                           , validationDelegate: (parameters) =>
+                           {
+                               if (!parameters.IsEmpty && parameters.Array.Length == 1)
+                                   if (StandardMessage.InternalCommand.EnumToStringArr().Contains(parameters.Array[0]))
+                                       return true;
+                               return false;
                            }));
         }
     }

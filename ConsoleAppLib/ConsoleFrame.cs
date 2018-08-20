@@ -7,10 +7,24 @@ namespace ConsoleAppLib
     public class ConsoleFrame
     {
         private CommandsDispatcher dispatcher;
+
+        // Как бы сделать так, чтобы только команды могли влиять на эти поля!
         private InternalAction action = InternalAction.NoAction;
         private StandardMessage standard_message = StandardMessage.NoMessage;
 
-        public void ChangeAction(InternalAction changeTo)
+        public void AddCommand(Command command)
+        {
+            dispatcher.Add(command);
+        }
+        public void AddCommands(Command[] commands)
+        {
+            foreach (var c in commands)
+            {
+                dispatcher.Add(c);
+            }
+        }
+
+        public void ChangeAction(InternalAction changeTo) 
         {
             action = changeTo;
         } 

@@ -6,7 +6,10 @@ namespace Blank
     {
         static void Main(string[] args)
         {
-            new ConsoleFrame().Run();
+            ConsoleFrame frame = new ConsoleFrame();
+            // Как бы сделать так, чтобы изменять поля Action и standard_message могли ТОЛЬКО команды!
+
+            frame.Run();
         }
     }
 }

@@ -11,9 +11,8 @@ namespace ConsoleAppLib
     /// </summary>
     
     public interface ICommandParameters { }
-    public interface ICommandOutput { }
 
-    public class BlankSingleton : ICommandParameters , ICommandOutput
+    public class BlankSingleton : ICommandParameters
     {
         private static BlankSingleton instance;
 
@@ -26,18 +25,17 @@ namespace ConsoleAppLib
         }
     }
 
-
-
-    public class CommandOutput
-    {
-
-    }
     public class CommandParameters : ICommandParameters
     {
-
+        private string[] arr;
+        
+        public CommandParameters(params string[] parameters)
+        {
+            arr = parameters;
+        }
     }
 
-    public delegate ICommandOutput CommandDelegate(ICommandParameters parameters);
+    public delegate void CommandDelegate(ICommandParameters parameters);
 
     public class Command
     {
@@ -54,15 +52,12 @@ namespace ConsoleAppLib
             NeedParameters = needParameters;
         }
 
-        public ICommandOutput Execute(ICommandParameters parameters)
+        public void Execute(ICommandParameters parameters)
         {
             if (!NeedParameters)
                 if (parameters.GetType() != BlankSingleton.GetInstance().GetType())
                     throw new Exception("You should pass BlankSingleton.GetInstance to this method, because command doesn't need parameters!");
-            return commandDelegate.Invoke(parameters);
+            commandDelegate.Invoke(parameters);
         }
-
-
-
     }
 }

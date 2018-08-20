@@ -2,48 +2,40 @@
 
 namespace ConsoleAppLib
 {
-    public enum CommandEnum { Quit, RepeatInput, DoSomething }
+    public enum InternalAction { Quit, RepeatInput, NoAction }
 
     public class ConsoleFrame
     {
+        private CommandsDispatcher dispatcher = new CommandsDispatcher();
+
+        
+        private static InternalAction action = InternalAction.NoAction;
+        public static void ChangeAction(InternalAction changeTo)
+        {
+            action = changeTo;
+        } 
 
         public void Run()
         {
             Styler.DisplayGreetings();
-            CommandEnum command = CommandEnum.RepeatInput;
-            while (command != CommandEnum.Quit)
+            while (action!=InternalAction.Quit)
             {
-                command = PerformAction(TryParseCommand());
+                Styler.DisplayInputSymbols();
+                var input = Console.ReadLine();
+                var parsed = dispatcher.TryParse(input);
+                parsed.Command.Execute(parsed.Parameters);
+                switch (action)
+                {
+                    case InternalAction.Quit:
+                        Styler.DisplayFarewell();
+                        Console.ReadLine();
+                        break;
+                    case InternalAction.RepeatInput:
+                        StandardMessages.Display(StandardMessage.InvalidCommand);
+                        continue;
+                }
             }
-            Styler.DisplayFarewell();
-            Console.ReadLine();
-        }
-        // Мы забираем какое-то значение и отправляем его на валидацию. Валидация нам говорит:
 
-        private static CommandEnum TryParseCommand()
-        {
-            Styler.DisplayInputSymbols();
-            var input = Console.ReadLine();
-            foreach (var name in Enum.GetNames(typeof(CommandEnum)))
-                if (input.ToLower() == name.ToLower())
-                    return (CommandEnum)Enum.Parse(typeof(CommandEnum), name);
-            StandardMessages.Display(StandardMessage.InvalidCommand);
-            return CommandEnum.RepeatInput;
-        }
-
-        private static CommandEnum PerformAction(CommandEnum command)
-        {
-            switch (command)
-            {
-                case CommandEnum.Quit:
-                    return command;
-                case CommandEnum.DoSomething:
-                    Console.WriteLine("Here i will invoke some real method!");
-                    // Invoke some method.
-                    return command;
-                default:
-                    return CommandEnum.RepeatInput;
-            }
         }
     }
 }

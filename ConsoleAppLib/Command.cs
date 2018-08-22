@@ -2,44 +2,26 @@
 
 namespace ConsoleAppLib
 {
-
-    public delegate void ExecutionDelegate(CommandParameters parameters);
-    public delegate bool ValidationDelegate(CommandParameters parameters);
-
-    /// <summary>
-    /// Класс, отвечает за приём, обработку команды и вызов соответствующего метода
-    /// </summary>
     public class Command
     {
-        public readonly string Name;
-        public readonly bool IsInternal;
-        private ExecutionDelegate commandDelegate;
-        private ValidationDelegate validationDelegate;
-        public bool NeedParameters { get { return validationDelegate != null; } }
-
-        public bool ValidateParameters(CommandParameters parameters)
+        private Func<string[], bool> validation;
+        private Func<string[], bool> action;
+        public string Name { get; private set; }
+        public bool IsValid(string[] parameters)
         {
-            return true; // Пока так.
+            return validation.Invoke(parameters);
         }
-        public void Execute(CommandParameters parameters)
+        public bool Execute(string[] parameters)
         {
-            if (validationDelegate.Invoke(parameters))
-                commandDelegate.Invoke(parameters);
-            else
-                throw new Exception("Invalid parameters!"); // Проверка только на то, есть параметры вообще или нет.
-
+            if (!IsValid(parameters))
+                throw new Exception("Exception: invalid parameters!");
+            return action.Invoke(parameters);
         }
-
-        public Command(bool isInternal, string name, ExecutionDelegate commandDelegate, ValidationDelegate validationDelegate)
+        public Command(string name, Func<string[], bool> action, Func<string[], bool> validation)
         {
             Name = name;
-            this.commandDelegate += commandDelegate;
-            this.validationDelegate += validationDelegate;
-            IsInternal = isInternal;
+            this.validation = validation;
+            this.action = action;
         }
-
-        public Command(bool isInternal, string name, ExecutionDelegate commandDelegate):
-            this(isInternal, name, commandDelegate, (parameters)=> { return true; }) { }
-
     }
 }

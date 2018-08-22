@@ -2,41 +2,56 @@
 {
     public class InputParser
     {
-        private CommandsDispatcher dispatcher;
+        private CommandDispatcher dispatcher;
 
-        public (Command Command, CommandParameters Parameters) TryParse(string input)
+        public ParserOutput TryParse(string input)
         {
-            // Распознаёт команду
+            // Распознаёт команду из диспетчера команд
+
             var decomposed = Decompose(input);
+            /*
+             * Предустановлено:
+             *  quit - ввести можно, но это не команда
+             *  help - вывести список команд
+             *  info - вывести данные фрейма
+             *  
+             * Устанавливаемые в наследниках
+             * access @database_name - можно ввести, команда (запускает новый фрейм)
+             * 
+             */
             var command = dispatcher.GetCommandByName(decomposed.Name);
+            if (command == null)
+            {
+ 
+            }
+            ParserResponse response;
             switch (command)
             {
                 case null:
-                    return (dispatcher.GetCommandByName("RepeatInput"), new CommandParameters("InvalidCommand")); //Invalid command
-                case Command c when c.IsInternal:
-                    return (dispatcher.GetCommandByName("RepeatInput"), new CommandParameters("InternalCommand")); //Internal command
-                case Command c when !c.ValidateParameters(decomposed.parameters):
-                    return (dispatcher.GetCommandByName("RepeatInput"), new CommandParameters("InvalidParameters")); //Invalid parameters
+                    response = ParserResponse.InvalidCommand; break;
+                case Command c when !c.IsValid(decomposed.parameters):
+                    response = ParserResponse.InvalidParameters; break;
                 default:
-                    return (command, decomposed.parameters);
+                    response = ParserResponse.Ok; break;
             }
+            return new ParserOutput(response, command, decomposed.parameters);
         }
-        private (string Name, CommandParameters parameters) Decompose(string input)
+        private (string Name, string[] parameters) Decompose(string input)
         {
             var arr = input.Split(' ');
             var name = arr[0];
             if (arr.Length == 1)
-                return (name, new CommandParameters());
+                return (name, null);
             else
             {
                 var parameters = new string[arr.Length - 1];
                 for (int i = 0; i < parameters.Length; i++)
                     parameters[i] = arr[i - 1];
-                return (name, new CommandParameters(parameters));
+                return (name, parameters);
             }
         }
 
-        public InputParser(CommandsDispatcher dispatcher)
+        public InputParser(CommandDispatcher dispatcher)
         {
             this.dispatcher = dispatcher;
         }

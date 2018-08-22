@@ -6,7 +6,7 @@ namespace ConsoleAppLib
     public enum LineStyle { Normal, Strong }
     public enum Alignment { Left, Center, Right }
 
-    public sealed class Styler
+    public sealed class ConsolePrinter
     {
         private const string _defaultGreetings = "Welcome to console application!";
         private const string _defaultFarewell = "Thank you for using our application!";

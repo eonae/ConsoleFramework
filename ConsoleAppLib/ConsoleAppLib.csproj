@@ -46,7 +46,7 @@
     <Compile Include="Command.cs" />
     <Compile Include="Frame.cs" />
     <Compile Include="Extensions.cs" />
-    <Compile Include="InputParser.cs" />
+    <Compile Include="Parser.cs" />
     <Compile Include="ConsolePrinter.cs" />
     <Compile Include="ParserOutput.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

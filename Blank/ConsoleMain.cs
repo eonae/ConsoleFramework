@@ -6,10 +6,16 @@ namespace Blank
     {
         static void Main(string[] args)
         {
-            Frame frame = new Frame();
-            // Как бы сделать так, чтобы изменять поля Action и standard_message могли ТОЛЬКО команды!
+            Frame frame = new MyFrame();
 
             frame.Run();
+        }
+
+    }
+    public class MyFrame : Frame
+    {
+        public MyFrame()
+        {
         }
     }
 }

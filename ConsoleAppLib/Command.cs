@@ -7,6 +7,7 @@ namespace ConsoleAppLib
         private Func<string[], bool> validation;
         private Func<string[], bool> action;
         public string Name { get; private set; }
+        public string Commandinfo { get; private set; }
         public bool IsValid(string[] parameters)
         {
             return validation.Invoke(parameters);
@@ -17,11 +18,12 @@ namespace ConsoleAppLib
                 throw new Exception("Exception: invalid parameters!");
             return action.Invoke(parameters);
         }
-        public Command(string name, Func<string[], bool> action, Func<string[], bool> validation)
+        public Command(string name, Func<string[], bool> action, Func<string[], bool> validation, string commandinfo = "No info for this command")
         {
-            Name = name;
+            Name = name.ToLower();
             this.validation = validation;
             this.action = action;
+            Commandinfo = commandinfo;
         }
     }
 }

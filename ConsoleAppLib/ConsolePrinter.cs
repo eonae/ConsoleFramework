@@ -54,6 +54,23 @@ namespace ConsoleAppLib
         {
             Console.Write($"{Appearence.InputSymbols} ");
         }
+        public static void DisplayParserResponse(ParserResponse response)
+        {
+            switch (response)
+            {
+                case ParserResponse.InvalidCommand:
+                    Console.WriteLine("Invalid command"); break;
+                case ParserResponse.InvalidParameters:
+                    Console.WriteLine("Invalid parameters"); break;
+                default:
+                    return;
+            }
+        }
+
+        public static void DisplayCommandInfo(Command command)
+        {
+            Console.WriteLine(command.Commandinfo);
+        }
 
         private static string BoxMessage(string message, Alignment alignment, LineStyle linesStyle)
         {

@@ -1,6 +1,6 @@
 ﻿namespace ConsoleAppLib
 {
-    public class InputParser
+    public class Parser
     {
         private CommandDispatcher dispatcher;
 
@@ -20,10 +20,7 @@
              * 
              */
             var command = dispatcher.GetCommandByName(decomposed.Name);
-            if (command == null)
-            {
- 
-            }
+
             ParserResponse response;
             switch (command)
             {
@@ -46,12 +43,12 @@
             {
                 var parameters = new string[arr.Length - 1];
                 for (int i = 0; i < parameters.Length; i++)
-                    parameters[i] = arr[i - 1];
+                    parameters[i] = arr[i + 1];
                 return (name, parameters);
             }
         }
 
-        public InputParser(CommandDispatcher dispatcher)
+        public Parser(CommandDispatcher dispatcher)
         {
             this.dispatcher = dispatcher;
         }

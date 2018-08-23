@@ -16,6 +16,13 @@ namespace Blank
     {
         public MyFrame()
         {
+            Dispatcher.Add(new CommandNonParams(name: "Frame",
+                                       action: (args) =>
+                                       {
+                                           var frame = new Frame();
+                                           frame.Run();
+                                           return true;
+                                       }));
         }
     }
 }

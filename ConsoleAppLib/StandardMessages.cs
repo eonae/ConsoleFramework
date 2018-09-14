@@ -3,6 +3,7 @@
 namespace ConsoleAppLib
 {
     public enum StandardMessage { NoMessage, InvalidCommand, InvalidParameters, InternalCommand }
+
     public static class StandardMessages
     {
         public static string InvalidCommand { get; set; } = "Invalid command!";

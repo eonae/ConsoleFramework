@@ -37,11 +37,9 @@ namespace ConsoleAppLib
                 return sb.ToString();
             }
         }
-
         public static AppearenceConfig Appearence { get; } = new AppearenceConfig();
         public static string GreetingsMessage { get; set; } = _defaultGreetings;
-        public static string FarewellMessage { get; set; } = _defaultFarewell;
-        
+        public static string FarewellMessage { get; set; } = _defaultFarewell;   
         public static void DisplayGreetings()
         {
             Console.WriteLine(BoxMessage(GreetingsMessage, Alignment.Left, LineStyle.Normal));
@@ -66,12 +64,10 @@ namespace ConsoleAppLib
                     return;
             }
         }
-
         public static void DisplayCommandInfo(Command command)
         {
             Console.WriteLine(command.Commandinfo);
         }
-
         private static string BoxMessage(string message, Alignment alignment, LineStyle linesStyle)
         {
             // Неплохо бы провести рефакторинг..
@@ -102,7 +98,6 @@ namespace ConsoleAppLib
 
             return sb.ToString();
         }
-
         private static string GetVerticalMargin(char verticalLineChar, int width, int margin)
         {
             var sb = new StringBuilder();
@@ -154,7 +149,6 @@ namespace ConsoleAppLib
             }
             return result;
         }
-
 
     }
 }

@@ -23,6 +23,5 @@ namespace ConsoleAppLib
             var type = enumeration.GetType();
             return Enum.GetNames(type).ToArray(); //Добавить проверку на пустое перечисление (может быть)
         }
-
     }
 }

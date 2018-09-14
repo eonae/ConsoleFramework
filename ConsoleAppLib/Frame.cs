@@ -2,30 +2,40 @@
 
 namespace ConsoleAppLib
 {
+    /* У фрейма есть две возможные функции:
+     * - либо принять команду, т. е. одно слово + набор параметров
+     * - либо принять целиком текст и что-то вернуть, причём было бы интересно вставлять многострочный текст.
+     * - либо 
+     * Т.е. MainFrame
+     */
     public enum InternalAction { Quit, RepeatInput, ExecuteCommand }
+
 
     public class Frame
     {
         public CommandDispatcher Dispatcher { get; private set; }
-        public Parser Parser { get; private set; }
+        public CommandParser CommandParser { get; private set; }
         public bool MainFrame { get; set; } = true;
 
         private bool quit = false;
+
         public void Run()
         {
             ConsolePrinter.DisplayGreetings();
+
             while (!quit)
             {
                 ConsolePrinter.DisplayInputSymbols();
                 var input = Console.ReadLine();
-                var parsed = Parser.TryParse(input);
+                var parsed = (CommandParserOutput)CommandParser.TryParse(input);
 
-                if (parsed.response == ParserResponse.Ok)
-                    parsed.command.Execute(parsed.parameters);
+                if (parsed.Response == CommandParserResponse.Ok)
+                    parsed.Command.Execute(parsed.Parameters);
                 else
-                    ConsolePrinter.DisplayParserResponse(parsed.response);
+                    ConsolePrinter.DisplayParserResponse(parsed.Response);
             }
             ConsolePrinter.DisplayFarewell();
+
             if (MainFrame)
                 Console.ReadKey();
         }
@@ -33,7 +43,7 @@ namespace ConsoleAppLib
         public Frame()
         {
             Dispatcher = new CommandDispatcher();
-            Parser = new Parser(Dispatcher);
+            CommandParser = new CommandParser(Dispatcher);
 
             Dispatcher.Add(new CommandNonParams(name: "Quit",
                                                 action: (parameters) => { return quit = true; },

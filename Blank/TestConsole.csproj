@@ -42,9 +42,9 @@
       <Project>{0618d8f4-f259-468d-b0f6-f5b3efe88ef6}</Project>
       <Name>ConsoleAppLib</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Test.BL\Test.BL.csproj">
+    <ProjectReference Include="..\Test.BL\Test.DataAccess.csproj">
       <Project>{50856101-dc00-4afb-989c-f3d979911c3b}</Project>
-      <Name>Test.BL</Name>
+      <Name>Test.DataAccess</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

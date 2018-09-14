@@ -1,37 +1,28 @@
 ﻿namespace ConsoleAppLib
 {
-    public class Parser
+
+    public class CommandParser : IParser
     {
         private CommandDispatcher dispatcher;
 
-        public ParserOutput TryParse(string input)
+        public IParserOutput TryParse(string input)
         {
             // Распознаёт команду из диспетчера команд
 
             var decomposed = Decompose(input);
-            /*
-             * Предустановлено:
-             *  quit - ввести можно, но это не команда
-             *  help - вывести список команд
-             *  info - вывести данные фрейма
-             *  
-             * Устанавливаемые в наследниках
-             * access @database_name - можно ввести, команда (запускает новый фрейм)
-             * 
-             */
             var command = dispatcher.GetCommandByName(decomposed.Name);
 
-            ParserResponse response;
+            CommandParserResponse response;
             switch (command)
             {
                 case null:
-                    response = ParserResponse.InvalidCommand; break;
+                    response = CommandParserResponse.InvalidCommand; break;
                 case Command c when !c.IsValid(decomposed.parameters):
-                    response = ParserResponse.InvalidParameters; break;
+                    response = CommandParserResponse.InvalidParameters; break;
                 default:
-                    response = ParserResponse.Ok; break;
+                    response = CommandParserResponse.Ok; break;
             }
-            return new ParserOutput(response, command, decomposed.parameters);
+            return new CommandParserOutput(response, command, decomposed.parameters);
         }
         private (string Name, string[] parameters) Decompose(string input)
         {
@@ -48,7 +39,7 @@
             }
         }
 
-        public Parser(CommandDispatcher dispatcher)
+        public CommandParser(CommandDispatcher dispatcher)
         {
             this.dispatcher = dispatcher;
         }

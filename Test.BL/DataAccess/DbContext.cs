@@ -7,112 +7,52 @@ using Dapper;
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
-    
-namespace Test.BL
-{
-    public interface IDbContext
-    {
-        (bool Success, string Message) AddUser(string login, string password);
-        (bool Success, string Message, IEnumerable<User> Data) GetUsers();
-        (bool Success, string Message) ChangePwd(string login, string newPwd);
-        (bool Success, string Message) RemoveUser(int id);
-        (bool Success, string Message, bool Result) CheckCredentials(string login, string password);
-    }
+using Helper;
 
-    public class DbContext : IDbContext
+namespace Test.DataAccess
+{
+
+    public class DbContext
     {
+        private static IDbOperator _dbOperator = new DbOperator();
+       
+        private enum SqlType { Select, Insert, Update, Delete, Create, Invalid }
+        private SqlType GetSqlType(string sql)
+        {
+            string firstWord = sql.Split(' ')[0]; // Выдаст ли ошибку если в функцию будет передана пустая строка?
+            var success = Enum.TryParse(firstWord, out SqlType result);
+            if (success) return result;
+            else return SqlType.Invalid;
+        }
+
+        ////////
+
         public (bool Success, string Message) AddUser(string login, string password)
         {
-            try
-            {
-                using (IDbConnection conn = new SqlConnection(ConnStr()))
-                {
-                    conn.Execute($"INSERT INTO Users VALUES ('{login}','{password}')");
-                    return (true, string.Empty);
-                }
-            }
-            catch (Exception e)
-            {
-                return (false, e.Message);
-            }
+            return _dbOperator.Execute($"INSERT INTO Users VALUES ('{login}','{password}')");
         }
-
         public (bool Success, string Message) ChangePwd(string login, string newPwd)
         {
-            try
-            {
-                using (IDbConnection conn = new SqlConnection(ConnStr()))
-                {
-                    conn.Execute($"UPDATE Users SET Pwd = '{newPwd}' WHERE Lgn = '{login}'");
-                    return (true, string.Empty);
-                }
-            }
-            catch (Exception e)
-            {
-                return (false, e.Message);
-            }
+            return _dbOperator.Execute($"UPDATE Users SET Pwd = '{newPwd}' WHERE Lgn = '{login}'");
         }
-
         public (bool Success, string Message, bool Result) CheckCredentials(string login, string password)
         {
-            try
-            {
-                using (IDbConnection conn = new SqlConnection(ConnStr()))
-                {
-                    var pwd = conn.ExecuteScalar($"SELECT Pwd FROM Users WHERE Lgn = '{login}'");
-                    return (true, string.Empty, password.Equals(pwd));
-                }
-            }
-            catch (Exception e)
-            {
-                return (false, e.Message, false);
-            }
+            return _dbOperator.ExecuteScalar<bool>($"SELECT Pwd FROM Users WHERE Lgn ='{login}'");
         }
-
+        public (bool Success, string Message, User Data) GetUser<User>(int id)
+        {
+            return _dbOperator.QuerySingle<User>($"SELECT Id, Lgn as Login, Pwd as Password FROM Users WHERE id = {id}");
+        }
         public (bool Success, string Message, IEnumerable<User> Data) GetUsers()
         {
-            try
-            {
-                using (IDbConnection conn = new SqlConnection(ConnStr()))
-                {
-                    var output = conn.Query<User>("SELECT Id, Lgn as Login, Pwd as Password FROM Users").ToList();
-                    return (true, string.Empty, output);
-                }
-            }
-            catch (Exception e)
-            {
-                return (false, e.Message, null);
-            }
+            return _dbOperator.Query<User>($"SELECT Id, Lgn as Login, Pwd as Password FROM Users");
         }
-
         public (bool Success, string Message) RemoveUser(int id)
         {
-            try
-            {
-                using (IDbConnection conn = new SqlConnection(ConnStr()))
-                {
-                    conn.Execute($"DELETE FROM Users WHERE Id = {id}");
-                    return (true, string.Empty);
-                }
-            }
-            catch (Exception e)
-            {
-                return (false, e.Message);
-            }
-        }
-
-        private string ConnStr()
-        {
-            return ConfigurationManager.ConnectionStrings["main"].ConnectionString;
+            return _dbOperator.Execute($"DELETE FROM Users WHERE Id = {id}");
         }
     }
 
 
-    public class User
-    {
-        public int Id { get; set; }
-        public string Login { get; set; }
-        public string Password { get; set; }
-    }
 
 }

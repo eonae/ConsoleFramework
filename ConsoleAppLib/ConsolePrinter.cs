@@ -52,13 +52,13 @@ namespace ConsoleAppLib
         {
             Console.Write($"{Appearence.InputSymbols} ");
         }
-        public static void DisplayParserResponse(ParserResponse response)
+        public static void DisplayParserResponse(CommandParserResponse response)
         {
             switch (response)
             {
-                case ParserResponse.InvalidCommand:
+                case CommandParserResponse.InvalidCommand:
                     Console.WriteLine("Invalid command"); break;
-                case ParserResponse.InvalidParameters:
+                case CommandParserResponse.InvalidParameters:
                     Console.WriteLine("Invalid parameters"); break;
                 default:
                     return;

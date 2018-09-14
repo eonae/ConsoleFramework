@@ -6,24 +6,34 @@ using System.Threading.Tasks;
 
 namespace ConsoleAppLib
 {
-    public enum ParserResponse
+    public enum CommandParserResponse { InvalidCommand, InvalidParameters, Ok }
+    public enum ParserResponse { Ok, Fail, Abort }
+
+    public interface IParserOutput { }
+
+    public class ParserOutput: IParserOutput
     {
-        InvalidCommand,
-        InvalidParameters,
-        Ok
+        public readonly ParserResponse Response;
+        public readonly object Value;
+
+        public ParserOutput(ParserResponse response, object value)
+        {
+            Response = response;
+            Value = value;
+        }
     }
 
-    public class ParserOutput
+    public class CommandParserOutput : IParserOutput
     {
-        public readonly ParserResponse response;
-        public readonly Command command;
-        public readonly string[] parameters;
+        public readonly CommandParserResponse Response;
+        public readonly Command Command;
+        public readonly string[] Parameters;
 
-        public ParserOutput(ParserResponse response, Command command, string[] parameters)
+        public CommandParserOutput(CommandParserResponse response, Command command, string[] parameters)
         {
-            this.response = response;
-            this.command = command;
-            this.parameters = parameters;
+            Response = response;
+            Command = command;
+            Parameters = parameters;
         }
     }
 }

@@ -8,8 +8,8 @@ namespace ConsoleAppLib
 
     public sealed class ConsolePrinter
     {
-        private const string _defaultGreetings = "Welcome to console application!";
-        private const string _defaultFarewell = "Thank you for using our application!";
+        private const string _defaultGreetings = "Frame started.";
+        private const string _defaultFarewell = "Frame stopped.";
 
         private struct Line
         {
@@ -39,7 +39,11 @@ namespace ConsoleAppLib
         }
         public static AppearenceConfig Appearence { get; } = new AppearenceConfig();
         public static string GreetingsMessage { get; set; } = _defaultGreetings;
-        public static string FarewellMessage { get; set; } = _defaultFarewell;   
+        public static string FarewellMessage { get; set; } = _defaultFarewell;
+        public static void DisplayLine()
+        {
+            Console.WriteLine(new string('*', 60));
+        }
         public static void DisplayGreetings()
         {
             Console.WriteLine(BoxMessage(GreetingsMessage, Alignment.Left, LineStyle.Normal));
@@ -66,7 +70,7 @@ namespace ConsoleAppLib
         }
         public static void DisplayCommandInfo(Command command)
         {
-            Console.WriteLine(command.Commandinfo);
+            Console.WriteLine($"  - {command.Name}\t - {command.Commandinfo}");
         }
         private static string BoxMessage(string message, Alignment alignment, LineStyle linesStyle)
         {
@@ -149,6 +153,5 @@ namespace ConsoleAppLib
             }
             return result;
         }
-
     }
 }

@@ -1,25 +1,42 @@
-﻿using System;
+﻿using Dapper;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
-using Dapper;
-using System.Configuration;
+using System.Linq;
 
 namespace Test.DataAccess
 {
-    public class DbOperator : IDbOperator
+    public class DapperDbOperator : IDbOperator
     {
         public string ConnectionString { get; }
 
-        public DbOperator(string connStr = "")
+        public DapperDbOperator(string connStr = "")
         {
             if (connStr == "")
                 ConnectionString = ConfigurationManager.ConnectionStrings["Default"].ConnectionString;
             else
                 ConnectionString = connStr;
+        }
+
+        public (bool Success, string Message, DataTable Output) UniversalQuery(string sql)
+        {
+            try
+            {
+                using (IDbConnection conn = new SqlConnection(ConnectionString))
+                {
+                    conn.Open();
+                    var adapter = new SqlDataAdapter(sql, conn as SqlConnection);
+                    var ds = new DataSet();
+                    adapter.Fill(ds);
+                    return (true, string.Empty, ds.Tables[0]);
+                }
+            }
+            catch (Exception e)
+            {
+                return (false, e.Message, null);
+            }
         }
 
         public (bool Success, string Message) Execute(string sql)
@@ -67,7 +84,6 @@ namespace Test.DataAccess
                 return (false, e.Message, null);
             }
         }
-
         public (bool Success, string Message, T Data) QuerySingle<T>(string sql)
         {
             try

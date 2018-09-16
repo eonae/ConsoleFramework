@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Data;
 
 namespace Test.DataAccess
 {
@@ -9,5 +10,6 @@ namespace Test.DataAccess
         (bool Success, string Message, T Data) QuerySingle<T>(string sql);
         (bool Success, string Message, T Value) ExecuteScalar<T>(string sql);
         (bool Success, string Message) Execute(string sql);
+        (bool Success, string Message, DataTable Output) UniversalQuery(string sql);
     }
 }

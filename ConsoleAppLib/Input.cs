@@ -17,12 +17,12 @@ namespace ConsoleAppLib
                 switch (parsed.Response)
                 {
                     case ParserResponse.Ok:
-                        return (true, parsed.Value);
+                        return (false, parsed.Value);
                     case ParserResponse.Fail:
                         Console.WriteLine("Parsing failed!");
                         continue;
                     case ParserResponse.Abort:
-                        return (false, null);
+                        return (true, null);
                 }
             }
         }

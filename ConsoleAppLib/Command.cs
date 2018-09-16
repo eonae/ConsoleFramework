@@ -18,7 +18,7 @@ namespace ConsoleAppLib
                 throw new Exception("Exception: invalid parameters!");
             return action.Invoke(parameters);
         }
-        public Command(string name, Func<string[], bool> action, Func<string[], bool> validation, string commandinfo = "No info for this command")
+        public Command(string name, Func<string[], bool> action, Func<string[], bool> validation, string commandinfo)
         {
             Name = name.ToLower();
             this.validation = validation;

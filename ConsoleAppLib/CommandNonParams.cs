@@ -4,7 +4,7 @@ namespace ConsoleAppLib
 {
     public class CommandNonParams : Command
     {
-        public CommandNonParams(string name, Func<string[], bool> action, string commandinfo = "No info for this command") :
+        public CommandNonParams(string name, Func<string[], bool> action, string commandinfo) :
           base
             (name: name, action: action,
              validation: (parameters) => { return parameters == null; },

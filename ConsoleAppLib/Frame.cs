@@ -45,36 +45,68 @@ namespace ConsoleAppLib
             Dispatcher = new CommandDispatcher();
             CommandParser = new CommandParser(Dispatcher);
 
-            Dispatcher.Add(new CommandNonParams(name: "Quit",
-                                                action: (parameters) => { return quit = true; },
-                                                commandinfo: "Command info: type'quit' to exit application."));
-            Dispatcher.Add(new Command(name: "Info",
-                                       action: (args) =>
-                                       {
-                                           ConsolePrinter.DisplayCommandInfo(Dispatcher.GetCommandByName(args[0]));
-                                           return true;
-                                       },
-                                       validation: (args) =>
-                                       {
+            Add(
+                name: "Quit",
+                action: (args) => { return quit = true; },
+                commandinfo: "Exits application.");
 
-                                           if (args != null)
-                                               if (args.Length == 1)
-                                                   if (Dispatcher.GetCommandByName(args[0]) != null)
-                                                       return true; // Добавить возможность...
-                                           return false;
-                                       },
-                                       commandinfo: "Command info: type 'info @command_name' to get info for any command."
-                                       ));
-            Dispatcher.Add(new CommandNonParams(name: "Help",
-                                       action: (args) =>
-                                       {
-                                           foreach (var command in Dispatcher.GetAllCommands())
-                                               ConsolePrinter.DisplayCommandInfo(command);
-                                           return true;
+            Add(
+                name: "Clear",
+                action: (args) =>
+                {
+                    Console.Clear();
+                    ConsolePrinter.DisplayGreetings();
+                    return true;
+                },
+                commandinfo: "Clears the console");
 
-                                       },
-                                       commandinfo: "Command info: type 'help' to get the list of all avalible commands."
-                                       ));
+            Add(
+                name: "Info",
+                action: (args) =>
+                {
+                    ConsolePrinter.DisplayCommandInfo(Dispatcher.GetCommandByName(args[0]));
+                    return true;
+                },
+                validation: (args) =>
+                {
+                    if (args != null)
+                        if (args.Length == 1)
+                            if (Dispatcher.GetCommandByName(args[0]) != null)
+                                return true; // Добавить возможность...
+                    return false;
+                },
+                commandinfo: "@command_name - Displays command info.");
+
+            Add(
+                name: "Help",
+                action: (args) =>
+                {
+                    Console.WriteLine();
+                    ConsolePrinter.DisplayLine();
+                    foreach (var command in Dispatcher.GetAllCommands())
+                        ConsolePrinter.DisplayCommandInfo(command);
+                    ConsolePrinter.DisplayLine();
+                    Console.WriteLine();
+
+                    return true;
+                },
+                commandinfo: "Displays full list of commands for current frame.");
         }
+
+        protected void Add(string name, Func<string[], bool> action, Func<string[], bool> validation, string commandinfo = "No info for this command")
+        {
+            Dispatcher.Add(new Command(name, action, validation, commandinfo));
+        }
+        protected void Add(string name, Func<string[], bool> action, string commandinfo = "No info for this command")
+        {
+            Dispatcher.Add(new CommandNonParams(name, action, commandinfo));
+        }
+        protected void Add(Command command)
+        {
+            Dispatcher.Add(command); //Если делать каждую команду отдельным классом.
+        }
+
     }
+
+
 }

@@ -46,7 +46,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DataAccess\DbContext.cs" />
-    <Compile Include="DataAccess\DbOperator.cs" />
+    <Compile Include="DataAccess\DapperDbOperator.cs" />
     <Compile Include="DataAccess\IDbOperator.cs" />
     <Compile Include="DataModels\User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

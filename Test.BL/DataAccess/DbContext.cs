@@ -14,18 +14,24 @@ namespace Test.DataAccess
 
     public class DbContext
     {
-        private static IDbOperator _dbOperator = new DbOperator();
-       
-        private enum SqlType { Select, Insert, Update, Delete, Create, Invalid }
-        private SqlType GetSqlType(string sql)
+        private static IDbOperator _dbOperator = new DapperDbOperator();
+
+        public (bool Success, string Message, DataTable Output) ExecuteSql(string sql)
         {
-            string firstWord = sql.Split(' ')[0]; // Выдаст ли ошибку если в функцию будет передана пустая строка?
-            var success = Enum.TryParse(firstWord, out SqlType result);
-            if (success) return result;
-            else return SqlType.Invalid;
+            SqlType type = SqlHelper.GetSqlType(sql);
+            switch (type)
+            {
+                case SqlType.SELECT:
+                    var queryResult = _dbOperator.UniversalQuery(sql);
+                    return queryResult;
+                case SqlType.INVALID:
+                    return (false, "Invalid query!", null);
+                default:
+                    var commandResult = _dbOperator.Execute(sql);
+                    return (commandResult.Success, commandResult.Message, null);
+            }
         }
 
-        ////////
 
         public (bool Success, string Message) AddUser(string login, string password)
         {

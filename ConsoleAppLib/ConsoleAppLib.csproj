@@ -46,12 +46,14 @@
     <Compile Include="Command.cs" />
     <Compile Include="Frame.cs" />
     <Compile Include="Input.cs" />
+    <Compile Include="ValueParsers\IntParser.cs" />
     <Compile Include="IParser.cs" />
-    <Compile Include="Parser.cs" />
+    <Compile Include="CommandParser.cs" />
     <Compile Include="ConsolePrinter.cs" />
     <Compile Include="ParserOutput.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StandardMessages.cs" />
+    <Compile Include="ValueParsers\StringParser.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

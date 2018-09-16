@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Text;
 
-namespace ConsoleAppLib
+namespace Eonae.Terminal
 {
     public enum LineStyle { Normal, Strong }
     public enum Alignment { Left, Center, Right }

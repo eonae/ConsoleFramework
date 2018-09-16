@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ConsoleAppLib
+namespace Eonae.Terminal
 {
     public class ValueInput
     {

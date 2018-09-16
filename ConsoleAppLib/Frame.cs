@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ConsoleAppLib
+namespace Eonae.Terminal
 {
     /* У фрейма есть две возможные функции:
      * - либо принять команду, т. е. одно слово + набор параметров

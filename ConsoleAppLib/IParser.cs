@@ -1,4 +1,4 @@
-﻿namespace ConsoleAppLib
+﻿namespace Eonae.Terminal
 {
     public interface IParser
     {

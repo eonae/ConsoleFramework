@@ -1,4 +1,4 @@
-﻿using ConsoleAppLib;
+﻿using Eonae.Terminal;
 
 namespace Blank
 {

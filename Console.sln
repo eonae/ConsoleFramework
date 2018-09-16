@@ -5,7 +5,7 @@ VisualStudioVersion = 15.0.27703.2042
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestConsole", "Blank\TestConsole.csproj", "{36F0FA3E-69C1-450A-A72B-56D8955672CB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleAppLib", "ConsoleAppLib\ConsoleAppLib.csproj", "{0618D8F4-F259-468D-B0F6-F5B3EFE88EF6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Eonae.Terminal", "ConsoleAppLib\Eonae.Terminal.csproj", "{0618D8F4-F259-468D-B0F6-F5B3EFE88EF6}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test.DataAccess", "Test.BL\Test.DataAccess.csproj", "{50856101-DC00-4AFB-989C-F3D979911C3B}"
 EndProject

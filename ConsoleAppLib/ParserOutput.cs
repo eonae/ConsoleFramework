@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ConsoleAppLib
+namespace Eonae.Terminal
 {
     public enum CommandParserResponse { InvalidCommand, InvalidParameters, Ok }
     public enum ParserResponse { Ok, Fail, Abort }

@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace ConsoleAppLib
+﻿namespace Eonae.Terminal
 {
     public class StringParser : IParser
     {

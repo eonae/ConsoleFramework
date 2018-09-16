@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ConsoleAppLib
+namespace Eonae.Terminal
 {
     public enum StandardMessage { NoMessage, InvalidCommand, InvalidParameters, InternalCommand }
 

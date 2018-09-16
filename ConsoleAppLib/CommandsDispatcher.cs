@@ -2,7 +2,7 @@
 using System.Linq;
 using System;
 
-namespace ConsoleAppLib
+namespace Eonae.Terminal
 {
     public sealed class CommandDispatcher
     {

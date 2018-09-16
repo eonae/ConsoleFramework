@@ -6,11 +6,8 @@ namespace ConsoleAppLib
     public enum LineStyle { Normal, Strong }
     public enum Alignment { Left, Center, Right }
 
-    public sealed class ConsolePrinter
+    public sealed class Styler
     {
-        private const string _defaultGreetings = "Frame started.";
-        private const string _defaultFarewell = "Frame stopped.";
-
         private struct Line
         {
             public readonly string Text;
@@ -22,9 +19,9 @@ namespace ConsoleAppLib
                 InnerSpaces = innerSpaces;
             }
 
-            public string GetString(char verticalLineChar)
+            public string GetString(char verticalLineChar, int left_margin)
             {
-                string margin = new string(' ', Appearence.Margins.Left);
+                string margin = new string(' ', left_margin);
 
                 var sb = new StringBuilder();
                 sb.Append(margin);
@@ -37,26 +34,28 @@ namespace ConsoleAppLib
                 return sb.ToString();
             }
         }
-        public static AppearenceConfig Appearence { get; } = new AppearenceConfig();
-        public static string GreetingsMessage { get; set; } = _defaultGreetings;
-        public static string FarewellMessage { get; set; } = _defaultFarewell;
-        public static void DisplayLine()
+
+        public AppearenceConfig Appearence { get; } = new AppearenceConfig();
+        public string GreetingsMessage { get; set; } = "Frame started.";
+        public string FarewellMessage { get; set; } = "Frame stopped.";
+
+        public void DisplayLine()
         {
             Console.WriteLine(new string('*', 60));
         }
-        public static void DisplayGreetings()
+        public void DisplayGreetings()
         {
             Console.WriteLine(BoxMessage(GreetingsMessage, Alignment.Left, LineStyle.Normal));
         }
-        public static void DisplayFarewell()
+        public void DisplayFarewell()
         {
             Console.WriteLine(BoxMessage(FarewellMessage, Alignment.Left, LineStyle.Normal));
         }
-        public static void DisplayInputSymbols()
+        public void DisplayInputSymbols()
         {
             Console.Write($"{Appearence.InputSymbols} ");
         }
-        public static void DisplayParserResponse(CommandParserResponse response)
+        public void DisplayParserResponse(CommandParserResponse response)
         {
             switch (response)
             {
@@ -68,11 +67,12 @@ namespace ConsoleAppLib
                     return;
             }
         }
-        public static void DisplayCommandInfo(Command command)
+        public void DisplayCommandInfo(Command command)
         {
             Console.WriteLine($"  - {command.Name}\t - {command.Commandinfo}");
         }
-        private static string BoxMessage(string message, Alignment alignment, LineStyle linesStyle)
+
+        private string BoxMessage(string message, Alignment alignment, LineStyle linesStyle)
         {
             // Неплохо бы провести рефакторинг..
 
@@ -96,13 +96,13 @@ namespace ConsoleAppLib
             sb.AppendLine(horizontalLine);
             sb.Append(GetVerticalMargin(lineChars.Vertical, decomposed.MaxLength + Appearence.InnerMargin.Horizontal * 2, Appearence.InnerMargin.Vertical));
             for (int i = 0; i < decomposed.LinesArr.Length; i++)
-                sb.AppendLine(new Line(decomposed.LinesArr[i], spaces[i]).GetString(lineChars.Vertical));
+                sb.AppendLine(new Line(decomposed.LinesArr[i], spaces[i]).GetString(lineChars.Vertical,Appearence.Margins.Left));
             sb.Append(GetVerticalMargin(lineChars.Vertical, decomposed.MaxLength + Appearence.InnerMargin.Horizontal * 2, Appearence.InnerMargin.Vertical));
             sb.AppendLine(horizontalLine);
 
             return sb.ToString();
         }
-        private static string GetVerticalMargin(char verticalLineChar, int width, int margin)
+        private string GetVerticalMargin(char verticalLineChar, int width, int margin)
         {
             var sb = new StringBuilder();
             for (int i = 0; i < margin; i++)
@@ -115,7 +115,7 @@ namespace ConsoleAppLib
             }
             return sb.ToString();
         }
-        private static (string[] LinesArr, int MaxLength) Decompose(string message)
+        private (string[] LinesArr, int MaxLength) Decompose(string message)
         {
             // Разбивает строку на подстроки (если есть символы перевода строки) и вычисляет максимальную длину подстроки.
 
@@ -128,7 +128,7 @@ namespace ConsoleAppLib
             }
             return (lines, maxLength);
         }
-        private static (int Left, int Right)[] GetSpaces(string[] lines, int maxLength, Alignment align)
+        private (int Left, int Right)[] GetSpaces(string[] lines, int maxLength, Alignment align)
         {
             // Вычислить количество пробелов слева и справа (у каждой строки)
 

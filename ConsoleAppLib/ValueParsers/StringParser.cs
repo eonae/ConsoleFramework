@@ -1,7 +1,11 @@
-﻿namespace ConsoleAppLib
+﻿using System;
+
+namespace ConsoleAppLib
 {
     public class StringParser : IParser
     {
+        
+
         private string _escapeCommand;
 
         public IParserOutput TryParse(string input)

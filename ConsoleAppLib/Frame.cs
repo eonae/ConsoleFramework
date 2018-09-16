@@ -15,39 +15,45 @@ namespace ConsoleAppLib
     {
         public CommandDispatcher Dispatcher { get; private set; }
         public CommandParser CommandParser { get; private set; }
-        public bool MainFrame { get; set; } = true;
+        public Styler Styler { get; private set; } = new Styler();
 
-        private bool quit = false;
+        public bool _isMainFrame { get; set; } = true;
+
+        private bool _quit = false;
 
         public void Run()
         {
-            ConsolePrinter.DisplayGreetings();
+            Console.Clear();
+            Styler.DisplayGreetings();
 
-            while (!quit)
+            while (!_quit)
             {
-                ConsolePrinter.DisplayInputSymbols();
+                Styler.DisplayInputSymbols();
                 var input = Console.ReadLine();
                 var parsed = (CommandParserOutput)CommandParser.TryParse(input);
 
                 if (parsed.Response == CommandParserResponse.Ok)
                     parsed.Command.Execute(parsed.Parameters);
                 else
-                    ConsolePrinter.DisplayParserResponse(parsed.Response);
+                    Styler.DisplayParserResponse(parsed.Response);
             }
-            ConsolePrinter.DisplayFarewell();
+            Console.Clear();
+            Styler.DisplayFarewell();
 
-            if (MainFrame)
+            if (_isMainFrame)
                 Console.ReadKey();
         }
 
-        public Frame()
+        public Frame(bool is_mainframe)
         {
             Dispatcher = new CommandDispatcher();
             CommandParser = new CommandParser(Dispatcher);
+            _isMainFrame = is_mainframe;
 
             Add(
                 name: "Quit",
-                action: (args) => { return quit = true; },
+                action: (args) => { return _quit = true; },
+                validation: (args) => { return ArgsCount(args) == 0; },
                 commandinfo: "Exits application.");
 
             Add(
@@ -55,16 +61,17 @@ namespace ConsoleAppLib
                 action: (args) =>
                 {
                     Console.Clear();
-                    ConsolePrinter.DisplayGreetings();
+                    Styler.DisplayGreetings();
                     return true;
                 },
+                validation: (args) => { return ArgsCount(args) == 0; },
                 commandinfo: "Clears the console");
 
             Add(
                 name: "Info",
                 action: (args) =>
                 {
-                    ConsolePrinter.DisplayCommandInfo(Dispatcher.GetCommandByName(args[0]));
+                    Styler.DisplayCommandInfo(Dispatcher.GetCommandByName(args[0]));
                     return true;
                 },
                 validation: (args) =>
@@ -82,14 +89,15 @@ namespace ConsoleAppLib
                 action: (args) =>
                 {
                     Console.WriteLine();
-                    ConsolePrinter.DisplayLine();
+                    Styler.DisplayLine();
                     foreach (var command in Dispatcher.GetAllCommands())
-                        ConsolePrinter.DisplayCommandInfo(command);
-                    ConsolePrinter.DisplayLine();
+                        Styler.DisplayCommandInfo(command);
+                    Styler.DisplayLine();
                     Console.WriteLine();
 
                     return true;
                 },
+                validation: (args) => { return ArgsCount(args) == 0; },
                 commandinfo: "Displays full list of commands for current frame.");
         }
 
@@ -97,13 +105,22 @@ namespace ConsoleAppLib
         {
             Dispatcher.Add(new Command(name, action, validation, commandinfo));
         }
-        protected void Add(string name, Func<string[], bool> action, string commandinfo = "No info for this command")
-        {
-            Dispatcher.Add(new CommandNonParams(name, action, commandinfo));
-        }
         protected void Add(Command command)
         {
             Dispatcher.Add(command); //Если делать каждую команду отдельным классом.
+        }
+
+        protected static int ArgsCount(params string[] args)
+        {
+            if (args == null)
+                return 0;
+            else
+            {
+                if (!args.GetType().IsArray)
+                    return 1;
+                else
+                    return args.Length;
+            }
         }
 
     }

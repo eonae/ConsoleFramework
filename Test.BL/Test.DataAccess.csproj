@@ -54,11 +54,5 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Helper\Helper.csproj">
-      <Project>{e109f4c1-0d9b-435f-9bad-c80f6bce27ee}</Project>
-      <Name>Helper</Name>
-    </ProjectReference>
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

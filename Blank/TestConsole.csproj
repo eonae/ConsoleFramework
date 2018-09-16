@@ -35,17 +35,19 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Frames\AccessDbFrame.cs" />
+    <Compile Include="Frames\AccessDbFrame\AccessDbFrame.cs" />
+    <Compile Include="Frames\AccessDbFrame\Commands\ChangePwdCommand.cs" />
+    <Compile Include="Frames\AccessDbFrame\Commands\CheckCredentialsCommand.cs" />
+    <Compile Include="Frames\AccessDbFrame\Commands\AddUserCommand.cs" />
+    <Compile Include="Frames\AccessDbFrame\Commands\SqlModeCommand.cs" />
+    <Compile Include="Frames\AccessDbFrame\Commands\GetTableCommand.cs" />
+    <Compile Include="Frames\AccessDbFrame\Commands\RemoveUserCommand.cs" />
     <Compile Include="MainFrame.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ConsoleAppLib\ConsoleAppLib.csproj">
       <Project>{0618d8f4-f259-468d-b0f6-f5b3efe88ef6}</Project>
       <Name>ConsoleAppLib</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Helper\Helper.csproj">
-      <Project>{e109f4c1-0d9b-435f-9bad-c80f6bce27ee}</Project>
-      <Name>Helper</Name>
     </ProjectReference>
     <ProjectReference Include="..\Test.BL\Test.DataAccess.csproj">
       <Project>{50856101-dc00-4afb-989c-f3d979911c3b}</Project>

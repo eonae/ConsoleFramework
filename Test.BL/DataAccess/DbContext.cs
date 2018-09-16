@@ -1,24 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Dapper;
-using System.Configuration;
 using System.Data;
-using System.Data.SqlClient;
-using Helper;
 
 namespace Test.DataAccess
 {
 
     public class DbContext
     {
+        private enum SqlType { SELECT, INSERT, UPDATE, DELETE, CREATE, ALTER, DROP, INVALID }
+        private static SqlType GetSqlType(string sql)
+        {
+            string firstWord = sql.Split(' ')[0].ToUpper(); // Выдаст ли ошибку если в функцию будет передана пустая строка?
+            var success = Enum.TryParse(firstWord, out SqlType result);
+            if (success) return result;
+            else return SqlType.INVALID;
+        }
+
         private static IDbOperator _dbOperator = new DapperDbOperator();
 
         public (bool Success, string Message, DataTable Output) ExecuteSql(string sql)
         {
-            SqlType type = SqlHelper.GetSqlType(sql);
+            SqlType type = GetSqlType(sql);
             switch (type)
             {
                 case SqlType.SELECT:
@@ -31,7 +33,6 @@ namespace Test.DataAccess
                     return (commandResult.Success, commandResult.Message, null);
             }
         }
-
 
         public (bool Success, string Message) AddUser(string login, string password)
         {
@@ -58,7 +59,4 @@ namespace Test.DataAccess
             return _dbOperator.Execute($"DELETE FROM Users WHERE Id = {id}");
         }
     }
-
-
-
 }
